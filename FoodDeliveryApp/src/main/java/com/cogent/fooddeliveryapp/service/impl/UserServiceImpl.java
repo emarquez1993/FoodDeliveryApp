@@ -37,13 +37,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String deleteUserById(long id) {
 		// TODO Auto-generated method stub
-		return null;
+		userRepository.deleteById(id);
+		return "success";
 	}
 
 	@Override
 	public User updateUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		userRepository.save(user);
+		return user;
 	}
 
 	@Override

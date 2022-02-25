@@ -21,6 +21,6 @@ server:
 com:
   cogent:
     fooddeliveryapp:
-      jwtSecret:foodapp
-      jwtExpirationMs:86400000
+      jwtSecret: foodapp
+      jwtExpirationMs: 86400000
     

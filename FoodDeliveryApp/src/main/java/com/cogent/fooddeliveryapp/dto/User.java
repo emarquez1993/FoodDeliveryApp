@@ -47,7 +47,7 @@ public class User {
 	
 	private String email;
 	
-	private String name;
+	private String userName;
 	
 	private String password;
 	

@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,8 @@ public class FoodController {
 	@Autowired
 	FoodRepository foodRepository;
 	
-	@PostMapping(value = "")
+	@PostMapping(value = "/add")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> createFood(@Valid @RequestBody Food food) {
 		
 		Food food2 = foodRepository.save(food);
@@ -42,12 +44,14 @@ public class FoodController {
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> getFoodById(@PathVariable("id") @Min(1) Long id) throws NoDataFoundException {
 		Food food = foodRepository.findById(id).orElseThrow(()-> new NoDataFoundException("sorry food not found"));
 		return ResponseEntity.ok(food);
 	}
 	
 	@GetMapping(value = "/")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> getAllFood() throws NoDataFoundException {
 		List<Food> food = foodRepository.findAll();
 		if(food.size()<1)
@@ -57,6 +61,7 @@ public class FoodController {
 	}
 
 	@GetMapping(value = "/:{foodType}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> getFoodByFoodType(@PathVariable("foodType") FoodType foodType) throws NoDataFoundException {
 		List<Food> food = foodRepository.getFoodByFoodType(foodType);
 		if(food.size()<1)
@@ -65,6 +70,7 @@ public class FoodController {
 			return ResponseEntity.ok(food);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value = "/:{foodId}")
 	public ResponseEntity<?> deleteFoodById(@PathVariable("foodId") @Min(1) Long id) throws NoDataFoundException
 	{
@@ -72,10 +78,11 @@ public class FoodController {
 		foodRepository.deleteById(id);
 		Map<String, String> message = new HashMap<>();
 		message.put("message", "food record successfully deleted");
-		return ResponseEntity.status(200).body(message);
+		return ResponseEntity.status(201).body(message);
 	}
 	
 	@GetMapping(value = "/all/desc")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> getAllFoodDesc() throws NoDataFoundException {
 		List<Food> food = foodRepository.findAll();
 		if(food.size()<1)
@@ -83,11 +90,12 @@ public class FoodController {
 		else
 		{
 			Collections.sort(food, (a,b)->b.getFoodName().compareTo(a.getFoodName()));
-			return ResponseEntity.status(200).body(food);
+			return ResponseEntity.status(201).body(food);
 		}
 	}
 	
 	@GetMapping(value = "/all/asc")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<?> getAllFoodAsc() throws NoDataFoundException {
 		List<Food> food = foodRepository.findAll();
 		if(food.size()<1)
@@ -95,7 +103,7 @@ public class FoodController {
 		else
 		{
 			Collections.sort(food, (a,b)->a.getFoodName().compareTo(b.getFoodName()));
-			return ResponseEntity.status(200).body(food);
+			return ResponseEntity.status(201).body(food);
 		}
 	}
 

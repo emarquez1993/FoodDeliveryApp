@@ -51,13 +51,12 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler{
 		return buildResponseEntity(apiError);
 	}
 	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> handleException(Exception e)
-	{
-		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR);
-		apiError.setMessage(e.getMessage());
-		return buildResponseEntity(apiError);
-	}
+	/*
+	 * @ExceptionHandler(Exception.class) public ResponseEntity<?>
+	 * handleException(Exception e) { ApiError apiError = new
+	 * ApiError(HttpStatus.INTERNAL_SERVER_ERROR);
+	 * apiError.setMessage(e.getMessage()); return buildResponseEntity(apiError); }
+	 */
 	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
